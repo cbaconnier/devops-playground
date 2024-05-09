@@ -9,7 +9,7 @@ I'm just learning DevOPS stuff
 1. Adjust the configuration you want in Vagrantfile
 2. Run `vagrant up` to provision the Kubernetes cluster.
 3. After setting up the cluster with `vagrant up`, run `./run-on-host-machine.sh` to configure `kubectl` on your host machine.
-4. Cleanup the machines with `vagrant destroy kubmaster kubnode1 kubnode2 -f` if you screwed up
+4. Cleanup the machines with `vagrant destroy kubmaster kubnode1 kubnode2 -f`
 
 ## Requirements
 
