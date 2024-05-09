@@ -50,3 +50,9 @@ sudo touch /tmp/testfile
 sudo umount /tmp
 ```
 
+Notes:
+
+Examples come from Xavki: 
+  
+  - https://www.youtube.com/watch?v=37VLg7mlHu8&list=PLn6POgpklwWqfzaosSgX2XEKpse5VY2v5&index=1
+  - https://gitlab.com/xavki/presentations-kubernetes/-/tree/master

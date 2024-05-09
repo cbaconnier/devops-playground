@@ -1,0 +1,90 @@
+# PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mynfspv
+spec:
+  storageClassName: myclass
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  #persistentVolumeReclaimPolicy: Delete
+  nfs:
+    server: 192.168.56.1
+    path: "/srv/exports"
+---
+# PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mynfspvc
+spec:
+  storageClassName: myclass
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi
+---
+# POD nginx
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-deploy
+spec:
+  containers:
+    - image: nginx
+      name: monnginx
+      resources: {}
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: monvolume
+  volumes:
+    - name: monvolume
+      persistentVolumeClaim:
+        claimName: mynfspvc
+---
+# POD debian
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debian-deploy
+spec:
+  containers:
+    - image: debian
+      name: madebian
+      command:
+        [
+          "/bin/bash",
+          "-c",
+          "apt-get update && apt-get install -y dnsutils && sleep 600",
+        ]
+      resources: {}
+      volumeMounts:
+        - mountPath: /tmp/
+          name: monvolume
+  volumes:
+    - name: monvolume
+      persistentVolumeClaim:
+        claimName: mynfspvc
+---
+# POD alpine
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine-deploy
+spec:
+  containers:
+    - image: alpine
+      name: maalpine
+      command:
+        ["/bin/sh", "-c", "apk update && apk add --no-cache curl && sleep 600"]
+      resources: {}
+      volumeMounts:
+        - mountPath: /tmp/
+          name: monvolume
+  volumes:
+    - name: monvolume
+      persistentVolumeClaim:
+        claimName: mynfspvc

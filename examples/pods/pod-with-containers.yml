@@ -1,0 +1,12 @@
+kind: Pod
+metadata:
+  name: monpod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+    - name: mondebian
+      image: debian
+      command: ["sleep", "600"]

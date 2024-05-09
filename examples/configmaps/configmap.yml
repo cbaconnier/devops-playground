@@ -1,0 +1,11 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: personne
+data:
+  nom: John
+  passion: kubernetes
+  clef: |
+
+    age.key=35 
+    taille.key=180

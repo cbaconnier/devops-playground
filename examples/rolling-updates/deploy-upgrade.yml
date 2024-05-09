@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfirstdeploy
+  namespace: default
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: monfront
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2 # nb pods supplementaire autorisé
+      maxUnavailable: 0 # nb pods down autorisé
+  minReadySeconds: 2
+  template:
+    metadata:
+      labels:
+        app: monfront
+      annotations:
+        kubernetes.io/change-cause: "Mise à jour en version 1.17"
+    spec:
+      containers:
+        - image: nginx:1.17 # suivante sera 1.17
+          imagePullPolicy: Always
+          name: podfront
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myfirstdeploy
+spec:
+  clusterIP: 10.99.29.169
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: monfront
+  type: ClusterIP

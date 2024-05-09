@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-deploy
+spec:
+  containers:
+    - image: nginx
+      name: mynginxnfs
+      resources: {}
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: www
+  volumes:
+    - name: www
+      persistentVolumeClaim:
+        claimName: mynfspvc

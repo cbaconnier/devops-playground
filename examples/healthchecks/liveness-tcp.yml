@@ -1,0 +1,18 @@
+# Recreate the container when it fails
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  namespace: clement
+  labels:
+    env: prod
+spec:
+  containers:
+    - name: liveness
+      image: nginx
+      livenessProbe:
+        tcpSocket:
+          port: 80
+          host: archlinux.org
+        initialDelaySeconds: 15
+        periodSeconds: 20

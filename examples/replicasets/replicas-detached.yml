@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  labels:
+    env: prod
+    type: front
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontrs
+  labels:
+    app: frontrs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: prod
+      type: front
+  template:
+    metadata:
+      labels:
+        type: front
+        env: prod
+    spec:
+      containers:
+        - name: nginx
+          image: nginx

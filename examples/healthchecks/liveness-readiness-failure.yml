@@ -1,0 +1,30 @@
+# Recreate the container when it fails
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  namespace: clement
+  labels:
+    env: prod
+spec:
+  containers:
+    - name: liveness
+      image: nginx
+      readinessProbe:
+        exec:
+          command:
+            - find
+            - alive.txt
+            - -mmin
+            - "-1"
+        initialDelaySeconds: 5
+        periodSeconds: 15
+      livenessProbe:
+        exec:
+          command:
+            - find
+            - alive.txt
+            - -mmin
+            - "-1"
+        initialDelaySeconds: 15
+        periodSeconds: 15

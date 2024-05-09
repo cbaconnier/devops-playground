@@ -1,0 +1,41 @@
+# Require metrics-server
+# Require at least 2 nodes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monfront
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monfront
+  template:
+    metadata:
+      labels:
+        app: monfront
+    spec:
+      containers:
+        - name: monpod
+          image: httpd
+          resources:
+            requests:
+              cpu: 10m
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: monhpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: monfront
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 15

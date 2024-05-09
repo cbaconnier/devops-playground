@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2024-05-03T09:43:41Z"
+  labels:
+    app: mynginx
+  name: mynginx
+  namespace: default
+  resourceVersion: "12116"
+  uid: 7a6311ca-33c5-4773-aa89-f5ac3e2c73ce
+spec:
+  clusterIP: 10.107.88.139
+  clusterIPs:
+  - 10.107.88.139
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8080-80
+    nodePort: 30856
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: mynginx
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

@@ -1,0 +1,51 @@
+# PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mynfspv
+spec:
+  storageClassName: myclass
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  #persistentVolumeReclaimPolicy: Delete
+  nfs:
+    server: 192.168.56.1
+    path: "/srv/exports"
+---
+# PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mynfspvc
+spec:
+  storageClassName: myclass
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+# POD Mysql
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-deploy
+spec:
+  containers:
+    - image: mysql:8.0
+      name: mysql
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+      ports:
+        - containerPort: 3306
+      volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: monvolume
+  volumes:
+    - name: monvolume
+      persistentVolumeClaim:
+        claimName: mynfspvc
